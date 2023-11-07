@@ -1,19 +1,11 @@
 #!/bin/bash
 
 # Define variables
-JUNEO_NODE_DIR="$HOME/juneo-node"
+JUNEO_NODE_DIR="$HOME/juneogo-binaries"
 JUNEO_BIN="$JUNEO_NODE_DIR/juneogo"
 JUNEO_SERVICE_DIR="$HOME/.config/systemd/user"
 JUNEO_SERVICE_FILE="$JUNEO_SERVICE_DIR/juneogo.service"
-BINARIES_REPO="https://github.com/Juneo-io/juneogo-binaries"
 PLUGINS_DIR="$HOME/.juneogo/plugins"
-
-# Clone the binaries repository
-echo "Cloning juneogo binaries from $BINARIES_REPO..."
-if ! git clone "$BINARIES_REPO" "$JUNEO_NODE_DIR"; then
-    echo "Error: Failed to clone juneogo binaries."
-    exit 1
-fi
 
 # Set up binaries and plugins
 chmod +x "$JUNEO_BIN"
