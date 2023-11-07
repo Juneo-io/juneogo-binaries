@@ -27,7 +27,7 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=$JUNEO_BIN --config-file="./config.json"
+ExecStart=$JUNEO_BIN --config-file="$JUNEO_NODE_DIR/config.json"
 LimitNOFILE=32768
 Restart=on-failure
 RestartSec=10
@@ -44,4 +44,4 @@ systemctl --user start juneogo.service
 echo
 echo "Done! Your JuneoGo node setup is complete."
 echo
-echo "To check the node's process, use: journalctl --user -u juneogo"
+echo "To check the node's process, use: journalctl --user -u juneogo -f"
