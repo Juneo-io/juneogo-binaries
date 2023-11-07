@@ -20,7 +20,7 @@ chmod +x "$JUNEO_BIN"
 mkdir -p "$PLUGINS_DIR"
 if [ -d "$JUNEO_NODE_DIR/plugins" ]; then
     cp -r "$JUNEO_NODE_DIR/plugins/"* "$PLUGINS_DIR"
-    chmod +x "$PLUGINS_DIR"/jevm
+    chmod +x "$PLUGINS_DIR"/*
 fi
 
 echo "Node files have been set up in $JUNEO_NODE_DIR"
@@ -35,7 +35,7 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=$JUNEO_BIN
+ExecStart=$JUNEO_BIN --config-file="./config.json"
 LimitNOFILE=32768
 Restart=on-failure
 RestartSec=10
