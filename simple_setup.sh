@@ -49,4 +49,3 @@ echo
 echo "Done! Your JuneoGo node setup is complete."
 echo
 echo "To check the node's process, use: journalctl --user -u juneogo"
-echo "To check the node's status, use: systemctl --user status juneogo.service"
