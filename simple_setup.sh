@@ -54,7 +54,6 @@ systemctl --user enable juneogo.service
 systemctl --user start juneogo.service
 
 rm -Rf $JUNEO_NODE_DIR
-rm $HOME/simple_setup.sh
 
 echo
 echo "Done! Your JuneoGo node setup is complete."
