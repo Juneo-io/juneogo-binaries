@@ -8,6 +8,12 @@ JUNEO_SERVICE_FILE="$JUNEO_SERVICE_DIR/juneogo.service"
 PLUGINS_DIR="$HOME/.juneogo/plugins"
 BINARIES_REPO="https://github.com/Juneo-io/juneogo-binaries"
 
+# Check that the script is not run as root
+if [ "$EUID" -eq 0 ]; then
+   echo "This script should not be run as root"
+   exit 1
+fi
+
 # Clone the binaries repository
 echo "Cloning juneogo binaries from $BINARIES_REPO..."
 if ! git clone "$BINARIES_REPO" "$JUNEO_NODE_DIR"; then
@@ -15,7 +21,7 @@ if ! git clone "$BINARIES_REPO" "$JUNEO_NODE_DIR"; then
     exit 1
 fi
 
-# mOVING binary and config file to the home directory
+# Moving binary and config file to the home directory
 mv $JUNEO_NODE_DIR/juneogo $HOME
 mv $JUNEO_NODE_DIR/config.json $HOME
 
