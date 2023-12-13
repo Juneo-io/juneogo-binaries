@@ -1,21 +1,22 @@
 #!/bin/bash
 
-if [ "$EUID" -ne 0 ]
-  then echo "Please run as root"
+# Ensure the script is run as root
+if [ "$EUID" -ne 0 ]; then
+  echo "Please run as root"
   exit
 fi
 
-# Create a new user and add it to the sudo group
+# Create a new user and add to sudo group
 if ! id -u juneogo > /dev/null 2>&1; then
   adduser --gecos "" juneogo
   usermod -aG sudo juneogo
 fi
 
-# Ask if the user wants to add an SSH key
+# SSH Key Configuration
 read -p "Do you want to add an SSH key for user juneogo? (y/n) " add_ssh_key
 if [ "$add_ssh_key" = "y" ]; then
   mkdir -p /home/juneogo/.ssh
-  echo "Please enter the SSH public key (beginning with ssh-rsa or ssh-ed25519):"
+  echo "Please enter the SSH public key:"
   read user_ssh_key
   echo "$user_ssh_key" >> /home/juneogo/.ssh/authorized_keys
   chmod 700 /home/juneogo/.ssh
@@ -24,25 +25,35 @@ if [ "$add_ssh_key" = "y" ]; then
   echo "SSH key added successfully."
 fi
 
-# Update sshd_config to disable root login
-sed -i '/^PermitRootLogin/c\PermitRootLogin no' /etc/ssh/sshd_config
+# SSH Configuration
+read -p "Do you want to disable root login? (default is no) (y/n) " disable_root_login
+read -p "Do you want to disable password authentication? (default is no) (y/n) " update_pass_auth
+config_changed=false
 
-# Update PasswordAuthentication to no
-echo "Changing PasswordAuthentication to no"
-sudo sed -i 's/#\?PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
+if [ "$disable_root_login" = "y" ]; then
+  sed -i '/^PermitRootLogin/c\PermitRootLogin no' /etc/ssh/sshd_config
+  echo "Root login disabled."
+  config_changed=true
+fi
 
-# Restart SSH
-sudo systemctl reload sshd
+if [ "$update_pass_auth" = "y" ]; then
+  sed -i 's/#\?PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
+  echo "PasswordAuthentication set to no."
+  config_changed=true
+fi
 
-# Install fail2ban & systemd (for timedatectl)
-sudo apt update
-sudo apt install -y fail2ban systemd
+if [ "$config_changed" = true ]; then
+  systemctl reload sshd
+  echo "SSH service reloaded to apply changes."
+fi
 
-# start & enable fail2ban
-sudo systemctl start fail2ban
-sudo systemctl enable fail2ban
+# Package Installation
+sudo apt update && sudo apt install -y fail2ban systemd
 
-# Prompt user to reboot the machine
+# Fail2ban Configuration
+sudo systemctl enable --now fail2ban
+
+# System Reboot Prompt
 read -p "Do you want to reboot the machine now? (y/n) " reboot_choice
 if [ "$reboot_choice" = "y" ]; then
   echo "Rebooting the machine..."
@@ -51,5 +62,4 @@ else
   echo "Reboot skipped. Remember to reboot the machine manually later."
 fi
 
-# Warning message about logging out and reconnecting
 echo "WARNING: Please log out and reconnect using the 'juneogo' user with the SSH key."
