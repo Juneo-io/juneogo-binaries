@@ -25,6 +25,14 @@ if [ "$add_ssh_key" = "y" ]; then
   echo "SSH key added successfully."
 fi
 
+# Warning before disabling root login or password authentication
+echo "CAUTION - make sure you understand the implications of disabling root login and password authentication to avoid unexpected errors and security issues."
+read -p "Do you wish to continue? (y/n) " proceed
+if [ "$proceed" != "y" ]; then
+  echo "Operation canceled. Exiting script."
+  exit
+fi
+
 # SSH Configuration
 read -p "Do you want to disable root login? (default is no) (y/n) " disable_root_login
 read -p "Do you want to disable password authentication? (default is no) (y/n) " update_pass_auth
