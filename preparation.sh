@@ -12,6 +12,8 @@ if ! id -u juneogo > /dev/null 2>&1; then
   usermod -aG sudo juneogo
 fi
 
+loginctl enable-linger juneogo
+
 # SSH Key Configuration
 read -p "Do you want to add an SSH key for user juneogo? (y/n) " add_ssh_key
 if [ "$add_ssh_key" = "y" ]; then
