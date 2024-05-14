@@ -7,3 +7,5 @@ This repository contains the binaries for juneogo, the node implementation for t
 ## Installation
 
 You can download the binaries directly from this GitHub repository. Documentation for starting a node is available [here](https://docs.juneo.com/).
+
+For information on setting up juneogo usign the installation scripts, please read [Set up and Connect a node using the Install Script](https://docs.juneo.com/intro/build/set-up-and-connect-a-node)
