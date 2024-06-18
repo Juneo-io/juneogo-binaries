@@ -38,7 +38,6 @@ echo
 systemctl --user start juneogo.service
 
 rm -Rf $JUNEO_NODE_DIR
-
 echo
 echo "Done! Your JuneoGo node update is complete."
 echo
